@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Robot head -->
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M24,30 Q24,24 30,24 L78,24 Q84,24 84,30 L84,62 Q84,68 78,68 L30,68 Q24,68 24,62 Z"/>
+    <!-- Eyes glow -->
+    <path android:fillColor="#00B4D8"
+        android:pathData="M36,40 A6,6 0 1,1 36.01,40 Z"/>
+    <path android:fillColor="#00B4D8"
+        android:pathData="M72,40 A6,6 0 1,1 72.01,40 Z"/>
+    <!-- Eye pupils -->
+    <path android:fillColor="#0D1117"
+        android:pathData="M36,40 A3,3 0 1,1 36.01,40 Z"/>
+    <path android:fillColor="#0D1117"
+        android:pathData="M72,40 A3,3 0 1,1 72.01,40 Z"/>
+    <!-- Eye shine -->
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M38,38 A1.5,1.5 0 1,1 38.01,38 Z"/>
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M74,38 A1.5,1.5 0 1,1 74.01,38 Z"/>
+    <!-- Mouth smile -->
+    <path android:fillColor="#1458B8"
+        android:pathData="M38,55 L70,55 Q70,62 54,62 Q38,62 38,55 Z"/>
+    <!-- Antenna -->
+    <path android:fillColor="#00B4D8" android:strokeColor="#00B4D8" android:strokeWidth="3"
+        android:pathData="M54,24 L54,14"/>
+    <path android:fillColor="#00B4D8"
+        android:pathData="M54,14 A5,5 0 1,1 54.01,14 Z"/>
+    <!-- Ears -->
+    <path android:fillColor="#30363D"
+        android:pathData="M12,38 L24,38 L24,52 L12,52 Q8,52 8,45 Q8,38 12,38 Z"/>
+    <path android:fillColor="#30363D"
+        android:pathData="M96,38 L84,38 L84,52 L96,52 Q100,52 100,45 Q100,38 96,38 Z"/>
+    <!-- Neck -->
+    <path android:fillColor="#E6EDF3"
+        android:pathData="M44,68 L44,76 L64,76 L64,68 Z"/>
+    <!-- Body -->
+    <path android:fillColor="#1458B8"
+        android:pathData="M28,76 Q28,72 32,72 L76,72 Q80,72 80,76 L80,96 Q80,100 76,100 L32,100 Q28,100 28,96 Z"/>
+    <!-- Body circuit lines -->
+    <path android:fillColor="#FFFFFF" android:fillAlpha="0.3"
+        android:pathData="M38,82 L70,82 M38,88 L60,88 M38,94 L50,94"/>
+    <!-- AI chip on body -->
+    <path android:fillColor="#00B4D8"
+        android:pathData="M56,80 L70,80 L70,92 L56,92 Z"/>
+    <path android:fillColor="#0D1117"
+        android:pathData="M59,83 L67,83 L67,89 L59,89 Z"/>
+</vector>

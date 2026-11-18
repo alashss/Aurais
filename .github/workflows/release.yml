@@ -1,0 +1,100 @@
+name: Build & Release APK
+
+on:
+  push:
+    tags:
+      - 'v*'           # trigger saat push tag v1.0.0, v1.2.3, dst
+  workflow_dispatch:   # bisa juga trigger manual dari GitHub UI
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # perlu untuk buat GitHub Release
+
+    steps:
+      # 1. Checkout repo
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Setup JDK 17
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      # 3. Setup Android SDK
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      # 4. Grant execute ke gradlew
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      # 5. Decode keystore dari secret base64
+      - name: Decode Keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > $GITHUB_WORKSPACE/auraai-release.jks
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+
+      # 6. Ambil versi dari tag (strip "v" prefix)
+      - name: Get version
+        id: version
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            VERSION="${GITHUB_REF#refs/tags/v}"
+          else
+            VERSION="1.0.0"
+          fi
+          BUILD_NUM=$(echo $VERSION | tr -d '.' | sed 's/^0*//')
+          BUILD_NUM=${BUILD_NUM:-1}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "build_num=$BUILD_NUM" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION, Build: $BUILD_NUM"
+
+      # 7. Build release APK
+      - name: Build Release APK
+        run: ./gradlew assembleRelease
+        env:
+          KEYSTORE_PATH: ${{ github.workspace }}/auraai-release.jks
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+          BUILD_NUMBER: ${{ steps.version.outputs.build_num }}
+
+      # 8. Rename APK biar rapi
+      - name: Rename APK
+        run: |
+          mkdir -p artifacts
+          cp app/build/outputs/apk/release/app-release.apk \
+             artifacts/AuraAI-v${{ steps.version.outputs.version }}.apk
+
+      # 9. Upload APK ke GitHub Release
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "AuraAI v${{ steps.version.outputs.version }}"
+          body: |
+            ## 🤖 AuraAI v${{ steps.version.outputs.version }}
+
+            Floating AI bubble — jawab soal ujian otomatis di atas semua app.
+
+            ### Cara Install
+            1. Download APK di bawah
+            2. Izinkan "Install dari sumber tidak dikenal"
+            3. Install → buka app → izinkan Overlay
+            4. Tap **Mulai Bubble** → buka app ujian
+
+            ### Provider AI
+            - ✅ Pollinations (gratis, tanpa key)
+            - Gemini Flash, Groq, Mistral, Cohere, Together AI (gratis dengan key)
+          draft: false
+          prerelease: false
+          files: artifacts/AuraAI-v${{ steps.version.outputs.version }}.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

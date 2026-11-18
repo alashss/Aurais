@@ -1,0 +1,13 @@
+*.iml
+.gradle/
+local.properties
+.idea/
+.DS_Store
+/build
+/captures
+*.jks
+*.keystore
+keystore.properties
+auraai-release.jks
+app/build/
+gradle-wrapper.jar

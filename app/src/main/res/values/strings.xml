@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AuraAI</string>
+    <string-array name="providers">
+        <item>Auto (Cascade)</item>
+        <item>Pollinations (Gratis, No Key)</item>
+        <item>Gemini Flash</item>
+        <item>Groq (Llama3)</item>
+        <item>Mistral</item>
+        <item>Cohere</item>
+        <item>Together AI</item>
+        <item>OpenAI</item>
+    </string-array>
+</resources>
