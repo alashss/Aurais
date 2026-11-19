@@ -78,4 +78,5 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.gson)
     implementation(libs.markwon.core)
+    implementation("com.google.android.material:material:1.12.0") // tambah ini
 }
