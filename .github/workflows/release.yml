@@ -48,9 +48,9 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug --no-daemon
-        env:
-          ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
+        run: |
+          unset ANDROID_HOME
+          ./gradlew assembleDebug --no-daemon
 
       - name: Rename APK
         run: |
