@@ -23,20 +23,12 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Setup Android SDK & Accept Licenses
+      - name: Accept Android Licenses
         run: |
-          sudo apt-get install -y wget unzip
-          mkdir -p $HOME/android-sdk/cmdline-tools
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdtools.zip
-          unzip -q cmdtools.zip -d $HOME/android-sdk/cmdline-tools
-          mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
-          export ANDROID_HOME=$HOME/android-sdk
-          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-          yes | sdkmanager --licenses > /dev/null 2>&1 || true
-          yes | sdkmanager --licenses > /dev/null 2>&1 || true
-          yes | sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" > /dev/null 2>&1
-          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
-          echo "PATH=$PATH:$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools" >> $GITHUB_ENV
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null 2>&1 || true
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \
+            "platforms;android-34" \
+            "build-tools;34.0.0" > /dev/null 2>&1 || true
 
       - name: Fix gradlew
         run: |
@@ -58,8 +50,7 @@ jobs:
       - name: Build Debug APK
         run: ./gradlew assembleDebug --no-daemon
         env:
-          ANDROID_HOME: ${{ env.ANDROID_HOME }}
-          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+          ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
 
       - name: Rename APK
         run: |
